@@ -9,7 +9,6 @@
  * The notes corresponding to each direction can be freely set in the notes array.
  * 
  * ぴにゃぴにゃさん枠で鳴らしていたKoshiChimeをM5Stackで作ってみました
- * 処理、特にジャイロの計測遅延が長い、秒3サンプルぐらいしかできず、ちょっと残念な感じですがお試しください
  */
 
 #include <M5Core2.h>
