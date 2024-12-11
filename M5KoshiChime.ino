@@ -14,6 +14,12 @@
 #include <M5Core2.h>
 #include <M5UnitSynth.h>
 
+
+// for SD-Updater
+#define SDU_ENABLE_GZ
+#include <M5StackUpdater.h>
+
+
 M5UnitSynth synth;
 
 // User can set the notes corresponding to each direction here
@@ -69,12 +75,18 @@ void removeActiveNoteAt(int index) {
 
 int preCylNextButtonStatus = HIGH;
 int preCylPrevButtonStatus = HIGH;
+int preCylMenuButtonStatus = HIGH;
+
 int cylID = 0;
 int prevcylID = -1;
 
 void setup() {
   M5.begin();
   Serial.begin(115200);
+  
+  // for SD-Updater
+  checkSDUpdater( SD, MENU_BIN, 5000 );
+
   Serial.println("KoshiChime");
 
   // Initialize accelerometer and gyroscope
@@ -104,6 +116,7 @@ void loop() {
   if (preCylNextButtonStatus != cylNextbuttonStatus) {
     // スイッチ状態が変化していた場合
     if (cylNextbuttonStatus == LOW) {
+      Serial.println("Next");
       cylID++;
       if(cylID > 3) cylID = 0;
     }
@@ -112,8 +125,17 @@ void loop() {
   if (preCylPrevButtonStatus != cylPrevbuttonStatus) {
     // スイッチ状態が変化していた場合
     if (cylPrevbuttonStatus == LOW) {
+      Serial.println("Prev");
       cylID--;
       if(cylID < 0) cylID = 3;
+    }
+  }
+  int cylMenubuttonStatus = M5.BtnB.wasPressed();
+  if (preCylMenuButtonStatus != cylMenubuttonStatus) {
+    // スイッチ状態が変化していた場合
+    if (cylMenubuttonStatus == LOW) {
+      Serial.println("Go back to Menu");
+//      checkSDUpdater( SD, MENU_BIN, 5000, TFCARD_CS_PIN );
     }
   }
 
